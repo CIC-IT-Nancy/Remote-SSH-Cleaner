@@ -1,0 +1,91 @@
+{
+  "name": "remote-ssh-cleaner",
+  "displayName": "%displayName%",
+  "description": "%description%",
+  "version": "0.1.0",
+  "publisher": "cic-it-nancy",
+  "author": {
+    "name": "CIC-IT Nancy"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CIC-IT-Nancy/Remote-SSH-Cleaner/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CIC-IT-Nancy/Remote-SSH-Cleaner.git"
+  },
+  "homepage": "https://github.com/CIC-IT-Nancy/Remote-SSH-Cleaner/blob/main/README.md",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "icon": "icon.png",
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "remoteSshCleaner.preview",
+        "title": "%command.preview%"
+      },
+      {
+        "command": "remoteSshCleaner.clean",
+        "title": "%command.clean%"
+      }
+    ],
+    "configuration": {
+      "title": "%configuration.title%",
+      "properties": {
+        "remoteSshCleaner.cleanUserCache": {
+          "type": "boolean",
+          "default": false,
+          "description": "%configuration.cleanUserCache%"
+        },
+        "remoteSshCleaner.cleanDownloadedVsix": {
+          "type": "boolean",
+          "default": true,
+          "description": "%configuration.cleanDownloadedVsix%"
+        },
+        "remoteSshCleaner.cleanOldServers": {
+          "type": "boolean",
+          "default": true,
+          "description": "%configuration.cleanOldServers%"
+        },
+        "remoteSshCleaner.cleanOldExtensions": {
+          "type": "boolean",
+          "default": true,
+          "description": "%configuration.cleanOldExtensions%"
+        },
+        "remoteSshCleaner.checkOnStartup": {
+          "type": "boolean",
+          "default": true,
+          "description": "%configuration.checkOnStartup%"
+        },
+        "remoteSshCleaner.startupDelaySeconds": {
+          "type": "number",
+          "default": 5,
+          "minimum": 0,
+          "maximum": 300,
+          "description": "%configuration.startupDelaySeconds%"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^4.1.0"
+  },
+  "dependencies": {
+    "@draconides/format": "^1.0.3"
+  }
+}

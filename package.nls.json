@@ -1,0 +1,13 @@
+{
+  "displayName": "Remote SSH Cleaner",
+  "description": "Cleans old VS Code Server versions, obsolete extensions, and cached downloads in the remote environment.",
+  "command.preview": "Remote SSH Cleaner: Preview cleanup",
+  "command.clean": "Remote SSH Cleaner: Clean now",
+  "configuration.title": "Remote SSH Cleaner",
+  "configuration.cleanUserCache": "Delete the complete ~/.cache directory. Disabled by default.",
+  "configuration.cleanDownloadedVsix": "Delete data/CachedExtensionVSIXs.",
+  "configuration.cleanOldServers": "Delete server versions not referenced by lru.json.",
+  "configuration.cleanOldExtensions": "Keep only the newest version of each extension.",
+  "configuration.checkOnStartup": "Check at startup whether a cleanup is required.",
+  "configuration.startupDelaySeconds": "Delay in seconds before the automatic startup check."
+}

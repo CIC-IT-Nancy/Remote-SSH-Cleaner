@@ -128,34 +128,33 @@ async function plan() {
 	const sr = path.join(root, "cli", "servers"),
 		lru = path.join(sr, "lru.json");
 	if ((await exists(sr)) && (await exists(lru))) {
-		let keepVersion = "";
+		let keepVersions = [];
 		try {
 			for (const s of strings(JSON.parse(await fs.readFile(lru, "utf8")))) {
 				for (const h of s.match(/[0-9a-f]{40}/gi) || []) {
-					keepVersion = h;
-					break;
+					keepVersions.push(h);
 				}
 			}
 		} catch (e) {
 			throw Error(t("lruUnreadable", e.message));
 		}
 		
-		if (keepVersion !== ""){
+		if (keepVersions.length){
 			for (const n of await fs.readdir(root))
-				if (/^\.cli\..*\.log$/.test(n) && !n.includes(keepVersion)) 
+				if (/^\.cli\..*\.log$/.test(n) && !keepVersions.some(el => n.includes(el))) 
 					await add(path.join(root, n), t("cliLog"));
 			
 			if (c.get("cleanOldServers", true)) {
 				for (const n of await fs.readdir(sr)) {
-					if (n === "lru.json") 
+					if (n === "lru.json" || n === ".locks") 
 						continue;
 					
-					if (!n.includes(keepVersion))
+					if (!keepVersions.some(el => n.includes(el)))
 						await add(path.join(sr, n), t("oldServer"));
 				}
 				
 				for (const n of await fs.readdir(root))
-					if (/^code-.*$/.test(n) && !n.includes(keepVersion)) 
+					if (/^code-.*$/.test(n) && !keepVersions.some(el => n.includes(el))) 
 						await add(path.join(root, n), t("cliLog"));
 			}
 		}

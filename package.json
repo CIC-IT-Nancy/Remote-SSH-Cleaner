@@ -2,7 +2,7 @@
   "name": "remote-ssh-cleaner",
   "displayName": "%displayName%",
   "description": "%description%",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "cic-it-nancy",
   "author": {
     "name": "CIC-IT Nancy"

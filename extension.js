@@ -70,16 +70,6 @@ function inside(home, p) {
 	);
 }
 
-function extInfo(n) {
-	const m = n.match(/^(.+)-(\d+\.\d+\.\d+(?:[-+][\w.-]+)?)$/);
-	
-	return m ? {
-		id: m[1],
-		v: m[2],
-		n
-	} : null;
-}
-
 function cmp(a, b) {
 	return a.localeCompare(b, undefined, {
 		numeric: true,
@@ -130,7 +120,7 @@ async function plan() {
 	if ((await exists(sr)) && (await exists(lru))) {
 		let keepVersions = [];
 		try {
-			for (const s of strings(JSON.parse(await fs.readFile(lru, "utf8")))) {
+			for (const s of JSON.parse(await fs.readFile(lru, "utf8"))) {
 				for (const h of s.match(/[0-9a-f]{40}/gi) || []) {
 					keepVersions.push(h);
 				}
@@ -172,28 +162,27 @@ async function plan() {
 				await add(path.join(er, d.name), t("temporaryInstall"));
 			
 		if (c.get("cleanOldExtensions", true)) {
-			const g = new Map();
-			for (const d of ds) {
-				if (!d.isDirectory()) 
-					continue;
-				
-				const e = extInfo(d.name);
-				if (!e) 
-					continue;
-				
-				if (!g.has(e.id)) 
-					g.set(e.id, []);
-				
-				g.get(e.id)
-					.push(e);
+			const extF = path.join(er, "extensions.json");
+			if ((await exists(extF))) {
+				let keepExtensions = [];
+				try {
+					for (const ext of JSON.parse(await fs.readFile(extF, "utf8"))) {
+						keepExtensions.push(ext.relativeLocation);
+					}
+				} catch (e) {
+					throw Error(t("extensionsUnreadable", e.message));
+				}
+
+				for (const d of ds) {
+					if (!d.isDirectory()) 
+						continue;
+					
+					if(!keepExtensions.includes(d.name))
+						await add(path.join(er, d.name), t("oldExtension", d.name));
+				}
 			}
-			
-			for (const vs of g.values()) {
-				vs.sort((a, b) => cmp(b.v, a.v));
-				for (const e of vs.slice(1))
-					await add(path.join(er, e.n), t("oldExtension", e.id));
-			}
-		}
+		} else 
+			out.appendLine(t("extensionsMissing"));
 	}
 	
 	if (c.get("cleanUserCache", false))
